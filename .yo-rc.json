@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "16.20.2",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.24.0"
+    },
+    "version": "1.20.0",
+    "libraryName": "leavemaster",
+    "libraryId": "449c4951-a865-4982-bc4e-1778bde18f35",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "leavemaster",
+    "solutionShortDescription": "leavemaster description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
