@@ -12,7 +12,10 @@
     }
   },
   "externals": {},
-  "localizedResources": {
-    "LeaveMasterWebPartStrings": "lib/webparts/leaveMaster/loc/{locale}.js"
-  }
+ "localizedResources": {
+  "LeaveMasterWebPartStrings": "lib/webparts/leaveMaster/loc/{locale}.js",
+  "ControlStrings": "lib/webparts/leaveMaster/loc/{locale}.js"
+}
+
+
 }

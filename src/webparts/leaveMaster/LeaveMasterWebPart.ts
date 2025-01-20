@@ -8,7 +8,7 @@ import {
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 
-import * as strings from 'LeaveMasterWebPartStrings';
+import * as strings from 'ControlStrings'; // Localized strings
 import LeaveMaster from './components/LeaveMaster';
 import { ILeaveMasterProps } from './components/ILeaveMasterProps';
 
@@ -25,7 +25,6 @@ export default class LeaveMasterWebPart extends BaseClientSideWebPart<ILeaveMast
   }
 
   public render(): void {
-    // Ensure that the props being passed match ILeaveMasterProps
     const element: React.ReactElement<ILeaveMasterProps> = React.createElement(
       LeaveMaster,
       {
@@ -77,7 +76,7 @@ export default class LeaveMasterWebPart extends BaseClientSideWebPart<ILeaveMast
                 }),
                 PropertyPaneTextField('leaves_master', {
                   label: 'List Name',
-                  value: 'leaves_master', // Default value
+                  value: 'leaves_master',
                 }),
               ],
             },
