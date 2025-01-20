@@ -6,7 +6,6 @@ import '@pnp/sp/webs';
 import '@pnp/sp/lists';
 import '@pnp/sp/items';
 import {
-  TextField,
   Dropdown,
   DatePicker,
   PrimaryButton,
@@ -14,12 +13,12 @@ import {
   MessageBarType,
   Spinner,
   SpinnerSize,
+  TextField,
 } from '@fluentui/react';
 import { PeoplePicker, PrincipalType } from "@pnp/spfx-controls-react/lib/PeoplePicker";
 import { IPeoplePickerContext } from '@pnp/spfx-controls-react/lib/PeoplePicker';
 import { IPersonaProps } from '@fluentui/react/lib/Persona';
 
-// Define interface for Leave Item
 interface ILeaveItem {
   Title: string;
   leave_type: string;
@@ -35,7 +34,6 @@ interface IUser {
 
 const LIST_NAME = 'leaves_master';
 
-// Function to initialize SharePoint context
 const getSP = (context: WebPartContext): SPFI => {
   if (!context) {
     throw new Error('SharePoint context is required');
@@ -44,27 +42,16 @@ const getSP = (context: WebPartContext): SPFI => {
 };
 
 const LeaveMaster: React.FC<ILeaveMasterProps> = ({ context }): React.ReactElement => {
-  // State declarations
-  const [title, setTitle] = React.useState('');
   const [leaveType, setLeaveType] = React.useState<string | null>(null);
   const [approval, setApproval] = React.useState('Pending');
   const [leaveDate, setLeaveDate] = React.useState<Date | undefined>(undefined);
-
+  const [selectedUser, setSelectedUser] = React.useState<IUser | null>(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [successMessage, setSuccessMessage] = React.useState<string | null>(null);
   const [itemId, setItemId] = React.useState<string>('');
   const [fetchedItem, setFetchedItem] = React.useState<ILeaveItem | null>(null);
-  const [selectedUser, setSelectedUser] = React.useState<IUser | null>(null);
 
-  // Create PeoplePicker context with only the required properties
-  const peoplePickerContext: IPeoplePickerContext = {
-    absoluteUrl: context.pageContext.web.absoluteUrl,
-    spHttpClient: context.spHttpClient,
-    msGraphClientFactory: context.msGraphClientFactory
-  };
-
-  // Initialize SP context
   const sp = React.useMemo(() => {
     try {
       return getSP(context);
@@ -88,7 +75,12 @@ const LeaveMaster: React.FC<ILeaveMasterProps> = ({ context }): React.ReactEleme
     { key: 'Rejected', text: 'Rejected' },
   ];
 
-  // Handle form submission
+  const peoplePickerContext: IPeoplePickerContext = {
+    absoluteUrl: context.pageContext.web.absoluteUrl,
+    spHttpClient: context.spHttpClient,
+    msGraphClientFactory: context.msGraphClientFactory,
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
@@ -97,7 +89,7 @@ const LeaveMaster: React.FC<ILeaveMasterProps> = ({ context }): React.ReactEleme
       return;
     }
 
-    if (!selectedUser || !title || !leaveType || !leaveDate) {
+    if (!selectedUser || !leaveType || !leaveDate) {
       setError('All fields are required.');
       return;
     }
@@ -107,7 +99,6 @@ const LeaveMaster: React.FC<ILeaveMasterProps> = ({ context }): React.ReactEleme
       setError('Leave date cannot be in the past.');
       return;
     }
-    
 
     setLoading(true);
     setError(null);
@@ -116,14 +107,12 @@ const LeaveMaster: React.FC<ILeaveMasterProps> = ({ context }): React.ReactEleme
     try {
       const formattedDate = leaveDate.toISOString().split('T')[0];
       await sp.web.lists.getByTitle(LIST_NAME).items.add({
-        Title: title,
+        Title: selectedUser.displayName, // Use the display name from PeoplePicker
         leave_type: leaveType,
-        approval_status: approval,
+        aproval: approval,
         leave_date: formattedDate,
-        assigned_to: selectedUser.id,
       });
 
-      setTitle('');
       setLeaveType(null);
       setApproval('Pending');
       setLeaveDate(undefined);
@@ -139,7 +128,6 @@ const LeaveMaster: React.FC<ILeaveMasterProps> = ({ context }): React.ReactEleme
     }
   };
 
-  // Fetch Item by ID
   const fetchItemById = async (): Promise<void> => {
     if (!sp) {
       setError('SharePoint context not initialized');
@@ -175,7 +163,7 @@ const LeaveMaster: React.FC<ILeaveMasterProps> = ({ context }): React.ReactEleme
       const user: IUser = {
         id: items[0].id || '',
         displayName: items[0].text || '',
-        email: items[0].secondaryText || ''
+        email: items[0].secondaryText || '',
       };
       setSelectedUser(user);
     } else {
@@ -199,18 +187,15 @@ const LeaveMaster: React.FC<ILeaveMasterProps> = ({ context }): React.ReactEleme
         </MessageBar>
       )}
 
-      {/* Add Leave Request Form */}
       <form onSubmit={handleSubmit}>
         <PeoplePicker
           context={peoplePickerContext}
           titleText="Name"
           personSelectionLimit={1}
-          groupName=""
           showtooltip={true}
           required={true}
           onChange={getPeoplePickerItems}
           principalTypes={[PrincipalType.User]}
-          defaultSelectedUsers={selectedUser ? [selectedUser.email] : []}
         />
         <Dropdown
           label="Leave Type"
@@ -240,7 +225,6 @@ const LeaveMaster: React.FC<ILeaveMasterProps> = ({ context }): React.ReactEleme
         />
       </form>
 
-      {/* Fetch Item */}
       <div style={{ marginTop: 32 }}>
         <h3>Fetch Item by ID</h3>
         <TextField
