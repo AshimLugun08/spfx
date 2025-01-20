@@ -130,3 +130,82 @@
 .leaveMasterSection .submitButton:hover {
   background-color: #005a9e;
 }
+.leaveMasterSection {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.formTitle {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-weight: 500;
+  color: #333;
+}
+
+.inputField {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+
+  &:focus {
+    outline: none;
+    border-color: #0078d4;
+  }
+}
+
+.radioGroup {
+  display: flex;
+  gap: 20px;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.submitButton {
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+
+  &:hover {
+    background-color: #106ebe;
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+}
+
+.successMessage {
+  color: green;
+  margin-top: 10px;
+}
+
+.errorMessage {
+  color: red;
+  margin-top: 10px;
+}

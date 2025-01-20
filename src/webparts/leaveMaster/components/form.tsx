@@ -8,7 +8,7 @@ interface ILeaveMasterFormProps {
     leaveType: string;
     approval: string;
     leaveDate: string;
-    leaveDocument: File | null;
+   
   }) => void;
 }
 
@@ -17,17 +17,12 @@ const LeaveMasterForm: React.FC<ILeaveMasterFormProps> = ({ onSubmit }) => {
   const [leaveType, setLeaveType] = useState('');
   const [approval, setApproval] = useState('Pending');
   const [leaveDate, setLeaveDate] = useState('');
-  const [leaveDocument, setLeaveDocument] = useState<File | null>(null);
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    onSubmit({ employeeName, leaveType, approval, leaveDate, leaveDocument });
+    onSubmit({ employeeName, leaveType, approval, leaveDate });
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files ? event.target.files[0] : null;
-    setLeaveDocument(file);
-  };
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
@@ -95,15 +90,7 @@ const LeaveMasterForm: React.FC<ILeaveMasterFormProps> = ({ onSubmit }) => {
         />
       </div>
 
-      <div className={styles.inputGroup}>
-        <label htmlFor="leaveDocument" className={styles.label}>Leave Document</label>
-        <input
-          type="file"
-          id="leaveDocument"
-          onChange={handleFileChange}
-          className={styles.inputField}
-        />
-      </div>
+   
 
       <button type="submit" className={styles.submitButton}>Submit</button>
     </form>
